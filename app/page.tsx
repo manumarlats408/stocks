@@ -392,7 +392,7 @@ export default function StockPortfolio() {
                     <Button onClick={addAlert}>Crear Alerta</Button>
                   </DialogFooter>
                 </DialogContent>
-              </Dialog>
+              </Dialog> 
 
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
