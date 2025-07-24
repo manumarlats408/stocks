@@ -325,25 +325,25 @@ export default function StockPortfolio() {
                 </span>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={refreshQuotes} disabled={quotesLoading}>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-end">
+              <Button variant="outline" onClick={refreshQuotes} disabled={quotesLoading} className="w-full sm:w-auto">
                 <RefreshCw className={`w-4 h-4 mr-2 ${quotesLoading ? "animate-spin" : ""}`} />
                 Actualizar
               </Button>
 
-              <Button variant="outline" onClick={downloadExcel}>
+              <Button variant="outline" onClick={downloadExcel} className="w-full sm:w-auto">
                 <Download className="w-4 h-4 mr-2" />
                 Exportar Excel
               </Button>
 
-              <Button variant="outline" onClick={signOut}>
+              <Button variant="outline" onClick={signOut} className="w-full sm:w-auto">
                 <LogOut className="w-4 h-4 mr-2" />
                 Salir
               </Button>
 
               <Dialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" className="w-full sm:w-auto">
                     <Bell className="w-4 h-4 mr-2" />
                     Alertas
                   </Button>
@@ -396,7 +396,7 @@ export default function StockPortfolio() {
 
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button>
+                  <Button className="w-full sm:w-auto">
                     <Plus className="w-4 h-4 mr-2" />
                     Agregar Acción
                   </Button>
