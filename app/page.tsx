@@ -306,8 +306,8 @@ export default function StockPortfolio() {
 
   return (
     <AuthWrapper>
-      <div className="min-h-screen bg-gray-50 p-4">
-        <div className="max-w-7xl mx-auto space-y-6">
+      <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex justify-between items-center">
             <div>
@@ -544,7 +544,7 @@ export default function StockPortfolio() {
           )}
 
           {/* Resumen del Portafolio */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Valor Total</CardTitle>
@@ -614,83 +614,85 @@ export default function StockPortfolio() {
                   <p className="text-sm text-gray-400 mt-2">Haz clic en "Agregar Acción" para comenzar</p>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Símbolo</TableHead>
-                      <TableHead>Empresa</TableHead>
-                      <TableHead>Acciones</TableHead>
-                      <TableHead>Precio Compra</TableHead>
-                      <TableHead>Precio Actual</TableHead>
-                      <TableHead>Cambio</TableHead>
-                      <TableHead>Valor Total</TableHead>
-                      <TableHead>Ganancia/Pérdida</TableHead>
-                      <TableHead>Estado</TableHead>
-                      <TableHead>Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {dbPortfolio.map((stock) => {
-                      const quote = quotes[stock.symbol]
-                      const currentPrice = quote?.price || 0
-                      const totalValue = currentPrice * stock.shares
-                      const totalInvested = stock.purchase_price * stock.shares
-                      const gainLoss = totalValue - totalInvested
-                      const gainLossPercent = totalInvested > 0 ? (gainLoss / totalInvested) * 100 : 0
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Símbolo</TableHead>
+                        <TableHead>Empresa</TableHead>
+                        <TableHead>Acciones</TableHead>
+                        <TableHead>Precio Compra</TableHead>
+                        <TableHead>Precio Actual</TableHead>
+                        <TableHead>Cambio</TableHead>
+                        <TableHead>Valor Total</TableHead>
+                        <TableHead>Ganancia/Pérdida</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead>Acciones</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {dbPortfolio.map((stock) => {
+                        const quote = quotes[stock.symbol]
+                        const currentPrice = quote?.price || 0
+                        const totalValue = currentPrice * stock.shares
+                        const totalInvested = stock.purchase_price * stock.shares
+                        const gainLoss = totalValue - totalInvested
+                        const gainLossPercent = totalInvested > 0 ? (gainLoss / totalInvested) * 100 : 0
 
-                      return (
-                        <TableRow key={stock.id}>
-                          <TableCell className="font-medium">{stock.symbol}</TableCell>
-                          <TableCell className="text-sm text-gray-600">{quote?.name || stock.name}</TableCell>
-                          <TableCell>{formatInteger(stock.shares)}</TableCell>
-                          <TableCell>{formatCurrency(stock.purchase_price)}</TableCell>
-                          <TableCell>
-                            {quote ? (
-                              formatCurrency(quote.price)
-                            ) : (
-                              <span className="text-gray-400">Sin datos</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {quote && (
-                              <Badge variant={quote.changePercent >= 0 ? "default" : "destructive"}>
-                                {quote.changePercent >= 0 ? "+" : ""}
-                                {formatPercentage(quote.changePercent)}
-                              </Badge>
-                            )}
-                          </TableCell>
-                          <TableCell>{formatCurrency(totalValue)}</TableCell>
-                          <TableCell>
-                            <div className={gainLoss >= 0 ? "text-green-600" : "text-red-600"}>
-                              {formatCurrency(Math.abs(gainLoss))}
-                              <div className="text-xs">
-                                ({gainLoss >= 0 ? "+" : "-"}
-                                {formatPercentage(Math.abs(gainLossPercent))})
+                        return (
+                          <TableRow key={stock.id}>
+                            <TableCell className="font-medium">{stock.symbol}</TableCell>
+                            <TableCell className="text-sm text-gray-600">{quote?.name || stock.name}</TableCell>
+                            <TableCell>{formatInteger(stock.shares)}</TableCell>
+                            <TableCell>{formatCurrency(stock.purchase_price)}</TableCell>
+                            <TableCell>
+                              {quote ? (
+                                formatCurrency(quote.price)
+                              ) : (
+                                <span className="text-gray-400">Sin datos</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {quote && (
+                                <Badge variant={quote.changePercent >= 0 ? "default" : "destructive"}>
+                                  {quote.changePercent >= 0 ? "+" : ""}
+                                  {formatPercentage(quote.changePercent)}
+                                </Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>{formatCurrency(totalValue)}</TableCell>
+                            <TableCell>
+                              <div className={gainLoss >= 0 ? "text-green-600" : "text-red-600"}>
+                                {formatCurrency(Math.abs(gainLoss))}
+                                <div className="text-xs">
+                                  ({gainLoss >= 0 ? "+" : "-"}
+                                  {formatPercentage(Math.abs(gainLossPercent))})
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {quote && (
-                              <Badge variant={quote.isMarketOpen ? "default" : "secondary"}>
-                                {quote.isMarketOpen ? "Abierto" : "Cerrado"}
-                              </Badge>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-1">
-                              <Button variant="ghost" size="sm" onClick={() => openEditDialog(stock)}>
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => removeStock(stock.id)}>
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
+                            </TableCell>
+                            <TableCell>
+                              {quote && (
+                                <Badge variant={quote.isMarketOpen ? "default" : "secondary"}>
+                                  {quote.isMarketOpen ? "Abierto" : "Cerrado"}
+                                </Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-1">
+                                <Button variant="ghost" size="sm" onClick={() => openEditDialog(stock)}>
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => removeStock(stock.id)}>
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
               )}
             </CardContent>
           </Card>
